@@ -489,13 +489,142 @@ document.getElementById('filterStatus').addEventListener('change', renderFileLis
 document.getElementById('filterPriority').addEventListener('change', renderFileList);
 document.getElementById('filterDueDate').addEventListener('change', renderFileList);
 
-// Load data and initialize application
+// Function to trigger the file input
+function triggerImport() {
+    document.getElementById('importCSV').click();
+}
+
+// Function to handle file selection
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        importFromCSV(file);
+    }
+}
+
+// Function to import data from CSV
+function importFromCSV(file) {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const content = e.target.result;
+        const lines = content.split('\n');
+        
+        // Clear existing data
+        clients = [];
+        files = [];
+        lineup = [];
+
+        // Process each line
+        for (let i = 1; i < lines.length; i++) { // Start from 1 to skip header
+            const line = lines[i].trim();
+            if (line) {
+                const values = line.split(',');
+                if (values[0] === 'Client') {
+                    clients.push({
+                        name: values[2],
+                        email: values[3]
+                    });
+                } else if (values[0] === 'File') {
+                    const subTasks = values[8] ? values[8].split('|').map(task => {
+                        const [description, completed] = task.split(':');
+                        return { description, completed: completed === 'true' };
+                    }) : [];
+                    
+                    const file = {
+                        id: parseInt(values[1]),
+                        clientName: values[2],
+                        name: values[3],
+                        status: values[4],
+                        notes: values[5],
+                        priority: values[6],
+                        dueDate: values[7],
+                        subTasks: subTasks
+                    };
+                    files.push(file);
+
+                    // Add to lineup if there's a lineup order
+                    const lineupOrder = parseInt(values[9]);
+                    if (!isNaN(lineupOrder) && lineupOrder > 0) {
+                        lineup[lineupOrder - 1] = file.id;
+                    }
+                }
+            }
+        }
+
+        // Remove any undefined entries from lineup
+        lineup = lineup.filter(id => id !== undefined);
+
+        // Update the UI and save data
+        renderClientList();
+        renderFileList();
+        renderLineup();
+        populateClientDropdowns();
+        saveData();
+
+        alert('Data imported successfully!');
+    };
+
+    reader.readAsText(file);
+}
+
+// Function to export data as CSV
+function exportToCSV() {
+    $('#exportModal').modal('show');
+}
+
+// Handle export form submission
+document.getElementById('exportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fileName = document.getElementById('exportFileName').value || 'task_manager_data';
+    let csvContent = "data:text/csv;charset=utf-8,";
+
+    // Headers
+    csvContent += "Type,ID,Client Name,File Name,Status,Notes,Priority,Due Date,Sub Tasks,Lineup Order\n";
+
+    // Client data
+    clients.forEach(client => {
+        csvContent += `Client,,${client.name},${client.email},,,,,,\n`;
+    });
+
+    // File data
+    files.forEach(file => {
+        const subTasks = file.subTasks.map(task => `${task.description}:${task.completed}`).join('|');
+        const lineupOrder = lineup.indexOf(file.id) + 1;
+        csvContent += `File,${file.id},${file.clientName},${file.name},${file.status},${file.notes},${file.priority},${file.dueDate},${subTasks},${lineupOrder > 0 ? lineupOrder : ''}\n`;
+    });
+
+    // Create a download link and trigger the download
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${fileName}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    $('#exportModal').modal('hide');
+});
+
+// Modify the window.onload function to include the new event listener and styles
 window.onload = function() {
     loadData();
     renderClientList();
     renderFileList();
     renderLineup();
     populateClientDropdowns();
+
+    // Add event listener for CSV import
+    document.getElementById('importCSV').addEventListener('change', handleFileSelect);
+
+    // Add pointer cursor to navbar items
+    const style = document.createElement('style');
+    style.textContent = `
+        .navbar-nav .nav-item:hover {
+            cursor: pointer;
+        }
+    `;
+    document.head.appendChild(style);
 };
 
 // Handle tab clicks
