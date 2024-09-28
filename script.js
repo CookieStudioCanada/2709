@@ -36,9 +36,9 @@ function renderClientList(filter = '') {
         li.className = 'list-group-item';
         li.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
-                <div onclick="viewClientDetails(${index})" style="cursor: pointer;">
+                <div class="client-list-item" onclick="viewClientDetails(${index})" style="cursor: pointer;">
+                    <i class="bi bi-person-fill" style="font-size: 1.5rem; margin-right: 10px;"></i>
                     <h5>${client.name}</h5>
-                    <p class="mb-0">${client.email || ''}</p>
                 </div>
                 <div>
                     <button class="btn btn-sm btn-secondary btn-edit-client mr-2" onclick="editClient(${index})">Edit</button>
@@ -563,6 +563,12 @@ function importFromCSV(file) {
         saveData();
 
         alert('Data imported successfully!');
+
+        // We select nav link 'clients' after the data has been imported. 
+        // Show this content with id= clients
+        $('#clients').addClass('show active');
+
+
     };
 
     reader.readAsText(file);
@@ -604,6 +610,11 @@ document.getElementById('exportForm').addEventListener('submit', function(e) {
     document.body.removeChild(link);
 
     $('#exportModal').modal('hide');
+
+    // We select nav link 'clients' after the data has been imported. 
+    // Show this content with id= clients
+    $('#clients').addClass('show active');
+    
 });
 
 // Modify the window.onload function to include the new event listener and styles

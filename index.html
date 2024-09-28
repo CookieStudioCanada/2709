@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tracktoute</title>
     <!-- Bootstrap CSS (v5.3.2) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons CSS (v1.11.2) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
     <!-- Custom Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-dark-green">
         <div class="container-fluid">
@@ -49,10 +50,12 @@
             <!-- Clients Tab -->
             <div class="tab-pane fade show active" id="clients" role="tabpanel">
                 <div class="card mt-4">
-                    <div class="card-header">Clients</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Clients</span>
+                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addClientModal">Add Client</button>
+                    </div>
                     <div class="card-body">
-                        <button class="btn btn-secondary mb-3" data-bs-toggle="modal" data-bs-target="#addClientModal">Add Client</button>
-                        <input type="text" id="searchClient" class="form-control mb-3" placeholder="Search Clients...">
+                        <input type="text" id="searchClient" class="form-control mt-3 mb-3" placeholder="Search Clients...">
                         <ul class="list-group" id="clientList">
                             <!-- Client items will be added here dynamically -->
                         </ul>
@@ -62,9 +65,11 @@
             <!-- Files Tab -->
             <div class="tab-pane fade" id="files" role="tabpanel">
                 <div class="card mt-4">
-                    <div class="card-header">Files</div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Files</span>
+                        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addFileModal">Add File</button>
+                    </div>
                     <div class="card-body">
-                        <button class="btn btn-secondary mb-4" data-bs-toggle="modal" data-bs-target="#addFileModal">Add File</button>
                         <!-- Filters -->
                         <div class="filter-group mb-4">
                             <div class="row g-3">
@@ -79,9 +84,9 @@
                                     <label for="filterStatus" class="form-label">Status</label>
                                     <select class="form-select" id="filterStatus">
                                         <option value="">All Statuses</option>
-                                        <option>Open</option>
+                                        <option>To do</option>
                                         <option>Closed</option>
-                                        <option>Pending</option>
+                                        <option>Waiting</option>
                                         <option>Other</option>
                                     </select>
                                 </div>
@@ -117,7 +122,7 @@
                 <div class="card mt-4">
                     <div class="card-header">File Lineup</div>
                     <div class="card-body">
-                        <p class="mb-3">Drag and drop files to define priority order.</p>
+                        <p class="mt-3 mb-3">List of priority.</p>
                         <ul id="lineupList">
                             <!-- Files in lineup will be added here dynamically -->
                         </ul>
@@ -158,7 +163,7 @@
         <div class="modal-dialog">
             <form class="modal-content" id="editClientForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editClientModalLabel">Edit Client</h5>
+                    <h5 class="modal-title " id="editClientModalLabel">Edit Client</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -239,9 +244,9 @@
                         <div class="col-md-4">
                             <label for="fileStatus" class="form-label">Status</label>
                             <select class="form-select" id="fileStatus">
-                                <option>Open</option>
+                                <option>To do</option>
                                 <option>Closed</option>
-                                <option>Pending</option>
+                                <option>Waiting</option>
                                 <option>Other</option>
                             </select>
                         </div>
@@ -251,7 +256,7 @@
                         </div>
                     </div>
                     <!-- Sub-Tasks -->
-                    <div class="mb-3">
+                    <div class="mt-3 mb-3">
                         <label class="form-label">Sub-Tasks</label>
                         <ul class="list-group mb-2" id="addSubTaskList">
                             <!-- Sub-tasks will be added here -->
@@ -315,9 +320,9 @@
                         <div class="col-md-4">
                             <label for="detailFileStatus" class="form-label">Status</label>
                             <select class="form-select" id="detailFileStatus">
-                                <option>Open</option>
+                                <option>To do</option>
                                 <option>Closed</option>
-                                <option>Pending</option>
+                                <option>Waiting</option>
                                 <option>Other</option>
                             </select>
                         </div>
@@ -326,10 +331,9 @@
                             <input type="date" class="form-control" id="detailFileDueDate">
                         </div>
                     </div>
-                    <!-- Sub-Tasks -->
-                    <div class="mb-3">
+                    <div class="mt-3 mb-3">
                         <label class="form-label">Sub-Tasks</label>
-                        <ul class="list-group mb-2" id="subTaskList">
+                        <ul class="list-group mt-3 mb-3" id="subTaskList">
                             <!-- Sub-tasks will be added here -->
                         </ul>
                         <div class="input-group">
@@ -366,13 +370,12 @@
                 <form id="exportForm">
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="exportFileName">File Name:</label>
+                            <label for="exportFileName"><strong>File Name</strong></label>
                             <input type="text" class="form-control" id="exportFileName" placeholder="Enter file name">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Export</button>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-success">Export</button>
+                        </div>
                     </div>
                 </form>
             </div>
