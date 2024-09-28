@@ -568,7 +568,7 @@ function importFromCSV(file) {
     reader.readAsText(file);
 }
 
-// Function to export data as CSV
+// Function to export data
 function exportToCSV() {
     $('#exportModal').modal('show');
 }
@@ -625,6 +625,17 @@ window.onload = function() {
         }
     `;
     document.head.appendChild(style);
+
+    // Close hamburger menu when a nav link is clicked
+    document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            if (navbarCollapse.classList.contains('show')) {
+                navbarToggler.click();
+            }
+        });
+    });
 };
 
 // Handle tab clicks
