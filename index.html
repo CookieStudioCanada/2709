@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ClientTrack CRM</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark-green">
+        <a class="navbar-brand" href="#">ClientTrack CRM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navigation Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#clients" role="tab" aria-controls="clients" aria-selected="true">Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#files" role="tab" aria-controls="files" aria-selected="false">Files</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#lineup" role="tab" aria-controls="lineup" aria-selected="false">Lineup</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-4">
+        <div class="tab-content" id="crmTabsContent">
+            <!-- Clients Tab -->
+            <div class="tab-pane fade show active" id="clients" role="tabpanel">
+                <div class="card mt-4">
+                    <div class="card-header">Clients</div>
+                    <div class="card-body">
+                        <button class="btn btn-secondary mb-3" data-toggle="modal" data-target="#addClientModal">Add Client</button>
+                        <input type="text" id="searchClient" class="form-control mb-3" placeholder="Search Clients...">
+                        <ul class="list-group" id="clientList">
+                            <!-- Client items will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Files Tab -->
+            <div class="tab-pane fade" id="files" role="tabpanel">
+                <div class="card mt-4">
+                    <div class="card-header">Files</div>
+                    <div class="card-body">
+                        <button class="btn btn-secondary mb-3" data-toggle="modal" data-target="#addFileModal">Add File</button>
+                        <!-- Filters -->
+                        <div class="filter-group">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="filterClient">Client</label>
+                                    <select class="form-control" id="filterClient">
+                                        <option value="">All Clients</option>
+                                        <!-- Client options will be added dynamically -->
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="filterStatus">Status</label>
+                                    <select class="form-control" id="filterStatus">
+                                        <option value="">All Statuses</option>
+                                        <option>Open</option>
+                                        <option>Closed</option>
+                                        <option>Pending</option>
+                                        <option>In Progress</option>
+                                        <option>Completed</option>
+                                        <option>On Hold</option>
+                                        <option>Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="filterPriority">Priority</label>
+                                    <select class="form-control" id="filterPriority">
+                                        <option value="">All Priorities</option>
+                                        <option value="High">High</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Low">Low</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="filterDueDate">Due Date</label>
+                                    <select class="form-control" id="filterDueDate">
+                                        <option value="">All</option>
+                                        <option value="incoming">Incoming</option>
+                                        <option value="latest">Latest</option>
+                                        <option value="overdue">Overdue</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="text" id="searchFile" class="form-control mb-3" placeholder="Search Files...">
+                        <ul class="list-group" id="fileList">
+                            <!-- File items will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Lineup Tab -->
+            <div class="tab-pane fade" id="lineup" role="tabpanel">
+                <div class="card mt-4">
+                    <div class="card-header">File Lineup</div>
+                    <div class="card-body">
+                        <p class="mb-3">Drag and drop files to define priority order.</p>
+                        <ul id="lineupList">
+                            <!-- Files in lineup will be added here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="clientForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addClientModalLabel">Add New Client</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Client Form Fields -->
+                    <div class="form-group">
+                        <label for="clientName">Name</label>
+                        <input type="text" class="form-control" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEmail">Email</label>
+                        <input type="email" class="form-control" id="clientEmail">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Close button removed -->
+                    <button type="submit" class="btn btn-secondary">Add Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+    <div class="modal fade" id="editClientModal" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form class="modal-content" id="editClientForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editClientModalLabel">Edit Client</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Edit Client Form Fields -->
+                    <div class="form-group">
+                        <label for="editClientName">Name</label>
+                        <input type="text" class="form-control" id="editClientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editClientEmail">Email</label>
+                        <input type="email" class="form-control" id="editClientEmail">
+                    </div>
+                    <input type="hidden" id="editClientIndex">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteClientBtn">Delete Client</button>
+                    <!-- Cancel button removed -->
+                    <button type="submit" class="btn btn-secondary">Update Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Client Details Modal -->
+    <div class="modal fade" id="clientDetailsModal" tabindex="-1" aria-labelledby="clientDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Client Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Client Details Content -->
+                    <h5 id="clientDetailName"></h5>
+                    <p id="clientDetailEmail"></p>
+                    <h6>Files:</h6>
+                    <ul class="list-group" id="clientFilesList">
+                        <!-- Files associated with the client will be listed here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add File Modal -->
+    <div class="modal fade" id="addFileModal" tabindex="-1" aria-labelledby="addFileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" id="fileForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFileModalLabel">Add New File</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                <div class="modal-body">
+                    <!-- File Form Fields -->
+                    <div class="form-group">
+                        <label for="fileClient">Client</label>
+                        <select class="form-control" id="fileClient" required>
+                            <option value="">Select Client</option>
+                            <!-- Client options will be added dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileName">File Name</label>
+                        <input type="text" class="form-control" id="fileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileNotes">Notes</label>
+                        <textarea class="form-control" id="fileNotes" rows="2"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="filePriority">Priority</label>
+                            <select class="form-control" id="filePriority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="fileStatus">Status</label>
+                            <select class="form-control" id="fileStatus">
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option>Pending</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="fileDueDate">Due Date</label>
+                            <input type="date" class="form-control" id="fileDueDate">
+                        </div>
+                    </div>
+                    <!-- Sub-Tasks -->
+                    <div class="form-group">
+                        <label>Sub-Tasks</label>
+                        <ul class="list-group mb-2" id="addSubTaskList">
+                            <!-- Sub-tasks will be added here -->
+                        </ul>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="addNewSubTask" placeholder="Add a new sub-task">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-add-subtask" type="button" id="addAddSubTaskBtn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lineup Toggle -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="addAddToLineup">
+                            <label class="form-check-label" for="addAddToLineup">Include in Lineup</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Close button removed -->
+                    <button type="submit" class="btn btn-secondary">Add File</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- File Details Modal -->
+    <div class="modal fade" id="fileDetailsModal" tabindex="-1" aria-labelledby="fileDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" id="fileDetailsForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fileDetailsModalLabel">File Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                </div>
+                <div class="modal-body">
+                    <!-- File Details Form -->
+                    <input type="hidden" id="fileIndex">
+                    <div class="form-group">
+                        <label for="detailFileName">File Name</label>
+                        <input type="text" class="form-control" id="detailFileName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailFileClient">Client</label>
+                        <select class="form-control" id="detailFileClient" required>
+                            <!-- Client options will be added dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="detailFileNotes">Notes</label>
+                        <textarea class="form-control" id="detailFileNotes" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="detailFilePriority">Priority</label>
+                            <select class="form-control" id="detailFilePriority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="detailFileStatus">Status</label>
+                            <select class="form-control" id="detailFileStatus">
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option>Pending</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="detailFileDueDate">Due Date</label>
+                            <input type="date" class="form-control" id="detailFileDueDate">
+                        </div>
+                    </div>
+                    <!-- Sub-Tasks -->
+                    <div class="form-group">
+                        <label>Sub-Tasks</label>
+                        <ul class="list-group mb-2" id="subTaskList">
+                            <!-- Sub-tasks will be added here -->
+                        </ul>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newSubTask" placeholder="Add a new sub-task">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary btn-add-subtask" type="button" id="addSubTaskBtn">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lineup Toggle -->
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="detailAddToLineup">
+                            <label class="form-check-label" for="detailAddToLineup">Include in Lineup</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteFileBtn">Delete File</button>
+                    <!-- Close button removed -->
+                    <button type="submit" class="btn btn-secondary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Dependencies -->
+    <!-- Use the full version of jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Include jQuery UI for drag-and-drop functionality -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- Application Script -->
+    <script src="script.js"></script>
+</body>
+</html>

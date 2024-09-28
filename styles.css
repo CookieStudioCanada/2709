@@ -1,0 +1,84 @@
+body {
+    background-color: #e8f5e9; /* Light green */
+}
+.navbar-brand {
+    font-weight: normal; /* Lighter bold */
+    color: #fff !important;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #fff;
+}
+.navbar-light .navbar-nav .nav-item.active .nav-link {
+    color: #c8e6c9;
+    font-weight: normal; /* Lighter bold */
+}
+.bg-dark-green {
+    background-color: #2e7d32 !important; /* Dark green */
+}
+.card-header {
+    background-color: #a5d6a7; /* Lighter green */
+    color: #000;
+    font-weight: bold;
+}
+.modal-header {
+    background-color: #a5d6a7; /* Lighter green */
+    color: #000;
+}
+.priority-high {
+    color: red;
+}
+.priority-medium {
+    color: orange;
+}
+.priority-low {
+    color: green;
+}
+.due-date {
+    font-style: italic;
+    font-size: 0.9em;
+}
+.task-completed {
+    text-decoration: line-through;
+}
+/* Styles for the Lineup tab */
+#lineupList {
+    list-style-type: none;
+    padding: 0;
+}
+#lineupList li {
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: move;
+}
+.filter-group {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.btn-edit-client {
+    background-color: #007bff;
+    color: #fff;
+}
+.btn-add-subtask {
+    background-color: #007bff;
+    color: #fff;
+}
+/* Custom button styles to match the theme */
+.btn-secondary {
+    background-color: #2e7d32;
+    border-color: #2e7d32;
+    color: #fff;
+}
+.btn-secondary:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}
+.btn-danger {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+}
+.btn-danger:hover {
+    background-color: #c62828;
+    border-color: #c62828;
+}
