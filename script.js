@@ -210,15 +210,15 @@ function renderFileList() {
     const fileList = document.getElementById('fileList');
     if (!fileList) return;
 
-    // Clear existing list
-    fileList.innerHTML = '';
-
     // Get filter values
     const searchTerm = document.getElementById('searchFile').value.toLowerCase();
     const clientFilter = document.getElementById('filterClient').value;
     const statusFilter = document.getElementById('filterStatus').value;
     const priorityFilter = document.getElementById('filterPriority').value;
     const dueDateFilter = document.getElementById('filterDueDate').value;
+
+    // Check if any filters are active
+    const hasActiveFilters = searchTerm || clientFilter || statusFilter || priorityFilter || dueDateFilter;
 
     // Filter files
     let filteredFiles = files.filter(file => {
@@ -260,6 +260,23 @@ function renderFileList() {
         return matchesSearch && matchesClient && matchesStatus && matchesPriority && matchesDate;
     });
 
+    // Clear existing list
+    fileList.innerHTML = '';
+
+    if (filteredFiles.length === 0) {
+        fileList.innerHTML = `
+            <div class="text-center p-3">
+                <p class="text-muted">No files found</p>
+                ${hasActiveFilters ? `
+                    <button class="btn btn-outline-secondary btn-sm" onclick="resetFileFilters()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset Filters
+                    </button>
+                ` : ''}
+            </div>
+        `;
+        return;
+    }
+
     // Sort files by priority (High > Medium > Normal) and then by due date
     filteredFiles.sort((a, b) => {
         const priorityOrder = { 'High': 0, 'Medium': 1, 'Normal': 2 };
@@ -290,10 +307,6 @@ function renderFileList() {
         `;
         fileList.appendChild(li);
     });
-
-    if (filteredFiles.length === 0) {
-        fileList.innerHTML = '<li class="list-group-item text-center text-muted">No files found</li>';
-    }
 }
 
 // Function to render the lineup
