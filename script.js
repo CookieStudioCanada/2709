@@ -96,7 +96,7 @@ window.onload = function() {
     populateClientDropdowns();
     initializeDashboard();
     initializeBootstrap();
-    initializeChat();
+    // initializeChat();
 
     // Safely add event listener for CSV import
     const importCSVInput = document.getElementById('importCSV');
@@ -714,6 +714,10 @@ function importFromCSV(file) {
         renderFileList();
         renderLineup();
         populateClientDropdowns();
+        
+        // Update dashboard components
+        initializeDashboard(); // This will update calendar, lineup, and due this week sections
+        
         saveData();
 
         alert('Data imported successfully!');
@@ -842,148 +846,148 @@ async function generateWithGemini(prompt) {
 // const response = await generateWithGemini('Write a description for this task');
 
 // Chat Interface Functions
-function initializeChat() {
-    const chatToggle = document.getElementById('chatToggle');
-    const chatBox = document.getElementById('chatBox');
-    const closeChatBtn = document.getElementById('closeChatBtn');
-    const chatInput = document.getElementById('chatInput');
-    const sendMessageBtn = document.getElementById('sendMessageBtn');
-    const chatMessages = document.getElementById('chatMessages');
+// function initializeChat() {
+//     const chatToggle = document.getElementById('chatToggle');
+//     const chatBox = document.getElementById('chatBox');
+//     const closeChatBtn = document.getElementById('closeChatBtn');
+//     const chatInput = document.getElementById('chatInput');
+//     const sendMessageBtn = document.getElementById('sendMessageBtn');
+//     const chatMessages = document.getElementById('chatMessages');
 
-    // Toggle chat box
-    chatToggle.addEventListener('click', () => {
-        chatBox.classList.toggle('hidden');
-        if (!chatBox.classList.contains('hidden')) {
-            chatInput.focus();
-        }
-    });
+//     // Toggle chat box
+//     chatToggle.addEventListener('click', () => {
+//         chatBox.classList.toggle('hidden');
+//         if (!chatBox.classList.contains('hidden')) {
+//             chatInput.focus();
+//         }
+//     });
 
-    // Close chat box
-    closeChatBtn.addEventListener('click', () => {
-        chatBox.classList.add('hidden');
-    });
+//     // Close chat box
+//     closeChatBtn.addEventListener('click', () => {
+//         chatBox.classList.add('hidden');
+//     });
 
-    // Send message
-    async function sendMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
+//     // Send message
+//     async function sendMessage() {
+//         const message = chatInput.value.trim();
+//         if (!message) return;
 
-        console.log('Sending message:', message);
+//         console.log('Sending message:', message);
         
-        try {
-            // Add user message to chat and history
-            addMessageToChat('user', message);
-            chatHistory.push({ role: 'user', content: message });
-            chatInput.value = '';
+//         try {
+//             // Add user message to chat and history
+//             addMessageToChat('user', message);
+//             chatHistory.push({ role: 'user', content: message });
+//             chatInput.value = '';
 
-            console.log('Getting AI response...');
-            const response = await generateWithGemini(message);
-            console.log('AI response received:', response);
+//             console.log('Getting AI response...');
+//             const response = await generateWithGemini(message);
+//             console.log('AI response received:', response);
             
-            // Add AI response to chat and history
-            addMessageToChat('ai', response);
-            chatHistory.push({ role: 'assistant', content: response });
-        } catch (error) {
-            console.error('Error in sendMessage:', error);
-            addMessageToChat('ai', 'Sorry, there was an error processing your message.');
-        }
-    }
+//             // Add AI response to chat and history
+//             addMessageToChat('ai', response);
+//             chatHistory.push({ role: 'assistant', content: response });
+//         } catch (error) {
+//             console.error('Error in sendMessage:', error);
+//             addMessageToChat('ai', 'Sorry, there was an error processing your message.');
+//         }
+//     }
 
-    // Add message to chat
-    function addMessageToChat(sender, message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}-message`;
+//     // Add message to chat
+//     function addMessageToChat(sender, message) {
+//         const messageDiv = document.createElement('div');
+//         messageDiv.className = `message ${sender}-message`;
         
-        if (sender === 'ai') {
-            // Use the formatting function for AI messages
-            messageDiv.innerHTML = formatAIMessage(message);
-        } else {
-            messageDiv.textContent = message;
-        }
+//         if (sender === 'ai') {
+//             // Use the formatting function for AI messages
+//             messageDiv.innerHTML = formatAIMessage(message);
+//         } else {
+//             messageDiv.textContent = message;
+//         }
         
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
+//         chatMessages.appendChild(messageDiv);
+//         chatMessages.scrollTop = chatMessages.scrollHeight;
+//     }
 
-    // Event listeners
-    sendMessageBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
+//     // Event listeners
+//     sendMessageBtn.addEventListener('click', sendMessage);
+//     chatInput.addEventListener('keypress', (e) => {
+//         if (e.key === 'Enter') {
+//             sendMessage();
+//         }
+//     });
 
-    // Update chat header with AI name and icon
-    document.querySelector('.chat-header h5').innerHTML = `
-        <i class="bi bi-robot"></i> FileFlow AI
-    `;
+//     // Update chat header with AI name and icon
+//     document.querySelector('.chat-header h5').innerHTML = `
+//         <i class="bi bi-robot"></i> FileFlow AI
+//     `;
 
-    // Create dropdown for suggested prompts
-    const suggestedPromptsHTML = `
-        <div class="suggested-prompts-dropdown">
-            <button class="btn btn-outline-light dropdown-toggle w-100" 
-                    type="button" 
-                    data-bs-toggle="dropdown" 
-                    aria-expanded="false">
-                <i class="bi bi-lightbulb"></i> Suggested Questions
-            </button>
-            <ul class="dropdown-menu w-100">
-                <li><h6 class="dropdown-header">Common Questions</h6></li>
-                <li><button class="dropdown-item" type="button">📋 What's my highest priority task?</button></li>
-                <li><button class="dropdown-item" type="button">⏰ Show me overdue files</button></li>
-                <li><button class="dropdown-item" type="button">👥 Summarize my client workload</button></li>
-                <li><div class="dropdown-divider"></div></li>
-                <li><h6 class="dropdown-header">Task Management</h6></li>
-                <li><button class="dropdown-item" type="button">📊 What's next in the lineup?</button></li>
-                <li><button class="dropdown-item" type="button">⚠️ Any files needing attention?</button></li>
-                <li><button class="dropdown-item" type="button">🎯 Help me prioritize my work</button></li>
-            </ul>
-        </div>
-    `;
+//     // Create dropdown for suggested prompts
+//     const suggestedPromptsHTML = `
+//         <div class="suggested-prompts-dropdown">
+//             <button class="btn btn-outline-light dropdown-toggle w-100" 
+//                     type="button" 
+//                     data-bs-toggle="dropdown" 
+//                     aria-expanded="false">
+//                 <i class="bi bi-lightbulb"></i> Suggested Questions
+//             </button>
+//             <ul class="dropdown-menu w-100">
+//                 <li><h6 class="dropdown-header">Common Questions</h6></li>
+//                 <li><button class="dropdown-item" type="button">📋 What's my highest priority task?</button></li>
+//                 <li><button class="dropdown-item" type="button">⏰ Show me overdue files</button></li>
+//                 <li><button class="dropdown-item" type="button">👥 Summarize my client workload</button></li>
+//                 <li><div class="dropdown-divider"></div></li>
+//                 <li><h6 class="dropdown-header">Task Management</h6></li>
+//                 <li><button class="dropdown-item" type="button">📊 What's next in the lineup?</button></li>
+//                 <li><button class="dropdown-item" type="button">⚠️ Any files needing attention?</button></li>
+//                 <li><button class="dropdown-item" type="button">🎯 Help me prioritize my work</button></li>
+//             </ul>
+//         </div>
+//     `;
 
-    const suggestedPromptsDiv = document.createElement('div');
-    suggestedPromptsDiv.className = 'suggested-prompts';
-    suggestedPromptsDiv.innerHTML = suggestedPromptsHTML;
+//     const suggestedPromptsDiv = document.createElement('div');
+//     suggestedPromptsDiv.className = 'suggested-prompts';
+//     suggestedPromptsDiv.innerHTML = suggestedPromptsHTML;
     
-    // Add click handlers for dropdown items
-    suggestedPromptsDiv.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', () => {
-            // Remove emoji and send the text
-            const promptText = item.textContent.replace(/^[^\w\s]+ /, '');
-            chatInput.value = promptText;
-            sendMessage();
-        });
-    });
+//     // Add click handlers for dropdown items
+//     suggestedPromptsDiv.querySelectorAll('.dropdown-item').forEach(item => {
+//         item.addEventListener('click', () => {
+//             // Remove emoji and send the text
+//             const promptText = item.textContent.replace(/^[^\w\s]+ /, '');
+//             chatInput.value = promptText;
+//             sendMessage();
+//         });
+//     });
     
-    chatBox.insertBefore(suggestedPromptsDiv, chatMessages);
-}
+//     chatBox.insertBefore(suggestedPromptsDiv, chatMessages);
+// }
 
-function formatAIMessage(message) {
-    let formattedMessage = '<div class="ai-response">';
+// function formatAIMessage(message) {
+//     let formattedMessage = '<div class="ai-response">';
     
-    // Split into sections by double asterisks
-    const sections = message.split(/\*\*(.*?)\*\*/g);
+//     // Split into sections by double asterisks
+//     const sections = message.split(/\*\*(.*?)\*\*/g);
     
-    sections.forEach((section, index) => {
-        if (index % 2 === 1) {
-            // Headers (bold sections)
-            formattedMessage += `<h3 class="section-header">${section}</h3>`;
-        } else {
-            // Process content
-            let content = section
-                // Remove bullet points and format as regular text
-                .replace(/^[•-] (.*?)(?=\n|$)/gm, '$1')
-                // Handle line breaks
-                .replace(/\n\n+/g, '<br><br>')
-                .replace(/\n/g, '<br>');
+//     sections.forEach((section, index) => {
+//         if (index % 2 === 1) {
+//             // Headers (bold sections)
+//             formattedMessage += `<h3 class="section-header">${section}</h3>`;
+//         } else {
+//             // Process content
+//             let content = section
+//                 // Remove bullet points and format as regular text
+//                 .replace(/^[•-] (.*?)(?=\n|$)/gm, '$1')
+//                 // Handle line breaks
+//                 .replace(/\n\n+/g, '<br><br>')
+//                 .replace(/\n/g, '<br>');
             
-            formattedMessage += content;
-        }
-    });
+//             formattedMessage += content;
+//         }
+//     });
     
-    formattedMessage += '</div>';
-    return formattedMessage;
-}
+//     formattedMessage += '</div>';
+//     return formattedMessage;
+// }
 
 // Add this to your existing script.js
 $("#menu-toggle").click(function(e) {
